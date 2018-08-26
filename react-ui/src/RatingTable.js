@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
-import RatingIcon from './RatingIcon';
+import RatingIcon, { RatingText } from './RatingIcon';
 import 'react-table/react-table.css';
 import './RatingTable.css';
 
@@ -16,8 +16,10 @@ export default class RatingTable extends Component {
       accessor: d => d,
       Cell: props => (
         <span className="username">
-          <RatingIcon rating={props.value.oldRating} />
-          <a href={getProfileLink(props.value.name)}>{props.value.name}</a>
+          <a href={getProfileLink(props.value.name)}>
+            <RatingIcon rating={props.value.oldRating} />
+            <RatingText rating={props.value.oldRating} value={props.value.name} />
+          </a>
         </span>
       ),
     }, {

@@ -61,3 +61,8 @@ export default function RatingIcon(props) {
     </div>
   )
 }
+
+export const RatingText = function(props) {
+  const {color} = getRatingColor(props.rating);
+  return <span style={{color: RATING_HEX_COLORS[color], fontWeight: "bold"}}> {props.value} </span>
+}
