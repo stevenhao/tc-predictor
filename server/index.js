@@ -25,7 +25,7 @@ if (process.env.ENABLE_CACHE) {
   const redisClient = redis.createClient(process.env.REDIS_URL || 'redis://127.0.0.1:6379');
   const cache = expressRedisCache({
     client: redisClient,
-    expire: 60 * 60,
+    expire: 7 * 24 * 60 * 60,
   });
   server.use(cache.route());
 }
