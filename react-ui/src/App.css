@@ -5,7 +5,8 @@ a {
 .App {
   text-align: center;
   background-color: #181a1b;
-  color: #636d70;
+  /* color: #636d70; */
+  color: white;
 }
 
 .App-logo {
