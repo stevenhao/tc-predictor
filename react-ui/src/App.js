@@ -32,13 +32,14 @@ class App extends Component {
   // TODO move this logic to a RatingTableContainer component?
   update() {
     const round = this.state.round;
-    return fetch(`http://localhost:5000/api/round/${round}`)
+    const apiServer = process.env.REACT_APP_API_SERVER || ""
+    return fetch(`${apiServer}/api/round/${round}`)
       .then(r => r.json())
       .then(roundData => {
         console.log('got roundData', roundData);
         const users = roundData.map(({userName}) => userName);
         Promise.map(users, user => (
-          fetch(`http://localhost:5000/api/user/${user}`)
+          fetch(`${apiServer}/api/user/${user}`)
           .then(r => r.json())
         ))
         .then(userData => {
