@@ -17,9 +17,9 @@ function getPerfFromRank(rank, totalPlayers) {
 }
 
 function getCompetitionFactor(volatilities, ratings) {
-  const volSquared = jStat.sumsqrd(volatilities);
-  const ratingVariance = jStat.variance(ratings);
-  return Math.sqrt(volSquared + ratingVariance);
+  const volMeanSquared = jStat.sumsqrd(volatilities) / ratings.length;
+  const ratingVariance = jStat.variance(ratings) * ratings.length / (ratings.length - 1);
+  return Math.sqrt(volMeanSquared + ratingVariance);
 }
 
 export default (roundData, userData) => {
@@ -46,7 +46,7 @@ export default (roundData, userData) => {
 
   const ratedUsers = users.filter(({ matchCount }) => matchCount > 0);
 
-  const winProbabilities = _.map(users, ({ rating, volatility}) => (
+  const winProbabilities = _.map(users, ({ rating, volatility }) => (
     _.map(ratedUsers, ({ rating: oRating, volatility: oVolatility }) => (
       getWinProbability(rating, oRating, volatility, oVolatility)
     ))
@@ -62,7 +62,6 @@ export default (roundData, userData) => {
     // if (matchCount === 0) return 0; // no prediction for unrated users
     const expectedRank = 0.5 + _.sum(winProbabilities[i]);
     const actualRank = 1 + _.filter(ratedUsers, user => user.points > points).length;
-    console.log({expectedRank, actualRank});
 
     const perfAs = rating + CF * (toPerf(actualRank) - toPerf(expectedRank));
     let weight = 1 / (1 - (0.42 / (matchCount + 1) + 0.18)) - 1;
@@ -74,9 +73,6 @@ export default (roundData, userData) => {
     const cap = Math.round(150 + 1500 / (matchCount + 2));
     const newRating = (rating + weight * perfAs) / (1 + weight);
     const prediction = _.clamp(Math.round(newRating - rating), -cap, cap);
-    if (prediction !== prediction) {
-      debugger;
-    }
     return prediction;
   }));
 
