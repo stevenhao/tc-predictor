@@ -5,7 +5,7 @@ Setup:
 - install dependencies (`yarn`)
 - install nodemon (`yarn global add nodemon`)
 - install frontend dependencies (`cd react-ui && yarn`)
-- build the frontend (`cd react-ui && yarn build`)
+- build the frontend (`yarn build`)
 - run the server (`yarn start`)
 - go to http://localhost:5000
 
