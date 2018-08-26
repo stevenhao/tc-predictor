@@ -33,6 +33,7 @@ class App extends Component {
   update() {
     const round = this.state.round;
     const apiServer = process.env.REACT_APP_API_SERVER || ""
+    console.log(apiServer);
     return fetch(`${apiServer}/api/round/${round}`)
       .then(r => r.json())
       .then(roundData => {

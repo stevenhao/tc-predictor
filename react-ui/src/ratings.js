@@ -77,9 +77,11 @@ export default (roundData, userData) => {
   }));
 
   return users.map((user, i) => ({
+    name: user.username,
     deltaRating: predictions[i],
     oldRating: user.rating,
     newRating: user.rating + predictions[i],
-    name: user.username,
+    oldVolatility: user.volatility,
+    newVolatility: user.volatility,
   }));
 };

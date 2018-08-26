@@ -46,7 +46,7 @@ server.get('/api/user/:user', function (req, res) {
 
 server.get('/api/round/:round', function (req, res) {
   const round = req.params.round;
-  console.log(`GRABBING round ${round}'`;
+  console.log(`GRABBING round ${round}`);
   res.set('Content-Type', 'application/json');
   topcoder.getRound(round)
     .then(coders => {

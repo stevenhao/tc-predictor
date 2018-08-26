@@ -42,7 +42,7 @@ export const RatingBubble = function(props) {
   const { color, progress } = getRatingColor(props.rating);
 
   return (
-    <div class="ratingIcon" style={{display: "inline-block", position: "relative", width: 14, height: 14}}>
+    <div className="ratingIcon" style={{display: "inline-block", position: "relative", width: 14, height: 14}}>
       {
         color === RATINGS.TARGET ?
           <React.Fragment>

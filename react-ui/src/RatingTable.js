@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
-import RatingIcon, { RatingText } from './RatingIcon';
+import RatingIcon from './RatingIcon';
 import 'react-table/react-table.css';
 import './RatingTable.css';
 
@@ -16,39 +16,52 @@ export default class RatingTable extends Component {
     const columns = [{
       id: 'name',
       Header: 'Name',
-      accessor: d => d,
+      accessor: d => ({name: d.name, rating: d.oldRating}),
       Cell: props => (
         <span className="username">
           <a href={getProfileLink(props.value.name)}>
-            <RatingIcon rating={props.value.oldRating} value={props.value.name} showBubble={true} />
+            <RatingIcon rating={props.value.rating} value={props.value.name} showBubble={true} />
           </a>
         </span>
       ),
+      sortMethod: (a, b) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+      },
     }, {
       id: 'delta',
       Header: 'Delta',
-      accessor: d => d,
+      accessor: d => (d.oldRating < 0 || d.newRating < 0 ? null : d.newRating - d.oldRating),
       Cell: props => (
         <span className="delta">
-          {props.value.oldRating < 0 || props.value.newRating < 0 ? "-" : deltaDisplay(props.value.newRating - props.value.oldRating)}
+          {props.value ? deltaDisplay(props.value) : "-"}
         </span>
-      )
+      ),
+      sortMethod: (a, b, desc) => {
+        if (a === null && b === null) return 0;
+        else if (a === null) return desc ? -1 : 1;
+        else if (b === null) return desc ? 1 : -1;
+        else if (a < b) return -1;
+        else if (a > b) return 1;
+        else return 0;
+      },
     }, {
       id: 'oldRating',
       Header: 'Old Rating',
-      accessor: d => d,
+      accessor: d => d.oldRating,
       Cell: props => (
         <span className="rating">
-          <RatingIcon rating={props.value.oldRating} value={ratingDisplay(props.value.oldRating)} showBubble={true}/>
+          <RatingIcon rating={props.value} value={ratingDisplay(props.value)} showBubble={true}/>
         </span>
       )
     }, {
       id: 'newRating',
       Header: 'New Rating',
-      accessor: d => d,
+      accessor: d => d.newRating,
       Cell: props => (
         <span className="rating">
-          <RatingIcon rating={props.value.oldRating} value={ratingDisplay(props.value.newRating)} showBubble={true}/>
+          <RatingIcon rating={props.value} value={ratingDisplay(props.value)} showBubble={true}/>
         </span>
       )
     }]
