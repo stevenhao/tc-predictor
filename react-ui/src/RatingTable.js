@@ -5,19 +5,7 @@ import './RatingTable.css';
 
 export default class RatingTable extends Component {
   render() {
-    const data = [{
-      name: 'Scott Wu',
-      oldRating: 3100,
-      newRating: 2000,
-    }]
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        name: 'Scott Wu' + i,
-        oldRating: 3100 + i,
-        newRating: 2000 + i,
-      })
-    }
-
+    const { data } = this.props;
     const columns = [{
       Header: 'Name',
       accessor: 'name',
@@ -31,6 +19,7 @@ export default class RatingTable extends Component {
 
     return (
       <ReactTable
+        key={`${data.length}`}
         data={data}
         columns={columns}
         defaultPageSize={data.length}

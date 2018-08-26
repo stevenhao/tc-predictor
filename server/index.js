@@ -3,6 +3,7 @@ const path = require('path');
 const Topcoder = require('./topcoder');
 const redis = require("redis");
 const expressRedisCache = require('express-redis-cache');
+const cors = require('cors');
 require('dotenv').config()
 
 
@@ -12,8 +13,9 @@ if (!process.env.TCSSO) {
 }
 
 const server = express();
-const topcoder = new Topcoder(process.env.TCSSO);
-topcoder.initializeSocket();
+
+// CORS allow localhost:3000, for dev purposes
+server.use(cors({ origin: 'http://localhost:3000' }))
 
 // Priority serve any static files.
 server.use(express.static(path.resolve(__dirname, '../react-ui/build')));
@@ -27,6 +29,9 @@ if (process.env.ENABLE_CACHE) {
   });
   server.use(cache.route());
 }
+
+const topcoder = new Topcoder(process.env.TCSSO);
+topcoder.initializeSocket();
 
 // Answer API requests.
 server.get('/api/user/:user', function (req, res) {
