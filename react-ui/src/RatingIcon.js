@@ -38,7 +38,7 @@ export const getRatingColor = rating => {
   }
 }
 
-export default function RatingIcon(props) {
+export const RatingBubble = function(props) {
   const { color, progress } = getRatingColor(props.rating);
 
   return (
@@ -65,4 +65,11 @@ export default function RatingIcon(props) {
 export const RatingText = function(props) {
   const {color} = getRatingColor(props.rating);
   return <span style={{color: RATING_HEX_COLORS[color], fontWeight: "bold"}}> {props.value} </span>
+}
+
+export default function RatingIcon(props) {
+  return <span>
+    {props.showBubble && <RatingBubble rating={props.rating} />}
+    {props.value && <RatingText rating={props.rating} value={props.value} />}
+  </span>
 }

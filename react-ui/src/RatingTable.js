@@ -17,17 +17,37 @@ export default class RatingTable extends Component {
       Cell: props => (
         <span className="username">
           <a href={getProfileLink(props.value.name)}>
-            <RatingIcon rating={props.value.oldRating} />
-            <RatingText rating={props.value.oldRating} value={props.value.name} />
+            <RatingIcon rating={props.value.oldRating} value={props.value.name} showBubble={true} />
           </a>
         </span>
       ),
     }, {
-      Header: 'Old Rating',
-      accessor: 'oldRating',
+      id: 'delta',
+      Header: 'Delta',
+      accessor: d => d,
+      Cell: props => (
+        <span className="delta">
+          {props.value.newRating > props.value.oldRating ? "+" + (props.value.newRating - props.value.oldRating) : props.value.newRating - props.value.oldRating}
+        </span>
+      )
     }, {
+      id: 'oldRating',
+      Header: 'Old Rating',
+      accessor: d => d,
+      Cell: props => (
+        <span className="rating">
+          <RatingIcon rating={props.value.oldRating} value={props.value.oldRating < 0 ? "-" : props.value.oldRating} showBubble={true}/>
+        </span>
+      )
+    }, {
+      id: 'newRating',
       Header: 'New Rating',
-      accessor: 'newRating',
+      accessor: d => d,
+      Cell: props => (
+        <span className="rating">
+          <RatingIcon rating={props.value.newRating} value={props.value.newRating < 0 ? "-" : props.value.newRating} showBubble={true}/>
+        </span>
+      )
     }]
 
     return (
