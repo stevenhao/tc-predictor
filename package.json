@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "cd react-ui && yarn build",
     "start": "node index.js",
     "debug": "DEBUG=* nodemon index.js",
     "dev": "nodemon index.js",

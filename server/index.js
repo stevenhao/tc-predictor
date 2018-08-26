@@ -7,9 +7,12 @@ require('dotenv').config()
 
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
-console.log(process.env.tcsso);
+if (!process.env.TCSSO) {
+  throw new Error('missing TCSSO');
+}
+
 const server = express();
-const topcoder = new Topcoder(process.env.tcsso);
+const topcoder = new Topcoder(process.env.TCSSO);
 topcoder.initializeSocket();
 
 // Priority serve any static files.
