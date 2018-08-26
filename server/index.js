@@ -15,13 +15,15 @@ topcoder.initializeSocket();
 // Priority serve any static files.
 server.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-// cache things
-const redisClient = redis.createClient(process.env.REDIS_URI || 'redis://127.0.0.1:6379');
-const cache = expressRedisCache({
-  client: redisClient,
-  expire: 60 * 60,
-});
-server.use(cache.route());
+// cache things if enabled
+if (process.env.ENABLE_CACHE) {
+  const redisClient = redis.createClient(process.env.REDIS_URI || 'redis://127.0.0.1:6379');
+  const cache = expressRedisCache({
+    client: redisClient,
+    expire: 60 * 60,
+  });
+  server.use(cache.route());
+}
 
 // Answer API requests.
 server.get('/api/user/:user', function (req, res) {
