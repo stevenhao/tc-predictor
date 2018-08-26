@@ -3,7 +3,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd react-ui && yarn build",
     "start": "node index.js",
     "postinstall": "cd react-ui && yarn && yarn build",
     "debug": "DEBUG=* nodemon index.js",
