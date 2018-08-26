@@ -1,12 +1,11 @@
-{
-  "name": "@scaleapi/topcoder-rating-predictor",
+{ "name": "@scaleapi/topcoder-rating-predictor",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "cd react-ui && yarn build",
     "start": "node index.js",
-    "postinstall": "cd react-ui && yarn build",
+    "postinstall": "cd react-ui && yarn && yarn build",
     "debug": "DEBUG=* nodemon index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
