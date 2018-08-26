@@ -8,7 +8,10 @@ export default class RatingTable extends Component {
   render() {
     const { data } = this.props;
 
-    let getProfileLink = name => `https://www.topcoder.com/members/${encodeURIComponent(name)}/details/?track=DATA_SCIENCE&subTrack=SRM`
+    const getProfileLink = name => `https://www.topcoder.com/members/${encodeURIComponent(name)}/details/?track=DATA_SCIENCE&subTrack=SRM`
+
+    const ratingDisplay = rating => rating < 0 ? "-" : rating
+    const deltaDisplay = delta => delta > 0 ? "+" + delta : delta
 
     const columns = [{
       id: 'name',
@@ -27,7 +30,7 @@ export default class RatingTable extends Component {
       accessor: d => d,
       Cell: props => (
         <span className="delta">
-          {props.value.newRating > props.value.oldRating ? "+" + (props.value.newRating - props.value.oldRating) : props.value.newRating - props.value.oldRating}
+          {props.value.oldRating < 0 || props.value.newRating < 0 ? "-" : deltaDisplay(props.value.newRating - props.value.oldRating)}
         </span>
       )
     }, {
@@ -36,7 +39,7 @@ export default class RatingTable extends Component {
       accessor: d => d,
       Cell: props => (
         <span className="rating">
-          <RatingIcon rating={props.value.oldRating} value={props.value.oldRating < 0 ? "-" : props.value.oldRating} showBubble={true}/>
+          <RatingIcon rating={props.value.oldRating} value={ratingDisplay(props.value.oldRating)} showBubble={true}/>
         </span>
       )
     }, {
@@ -45,7 +48,7 @@ export default class RatingTable extends Component {
       accessor: d => d,
       Cell: props => (
         <span className="rating">
-          <RatingIcon rating={props.value.newRating} value={props.value.newRating < 0 ? "-" : props.value.newRating} showBubble={true}/>
+          <RatingIcon rating={props.value.oldRating} value={ratingDisplay(props.value.newRating)} showBubble={true}/>
         </span>
       )
     }]
