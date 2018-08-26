@@ -36,7 +36,7 @@ topcoder.initializeSocket();
 // Answer API requests.
 server.get('/api/user/:user', function (req, res) {
   const user = req.params.user;
-  console.log('GRABBING user ${user}');
+  console.log(`GRABBING user ${user}`);
   res.set('Content-Type', 'application/json');
   topcoder.getUser(user)
     .then(user => {
@@ -46,7 +46,7 @@ server.get('/api/user/:user', function (req, res) {
 
 server.get('/api/round/:round', function (req, res) {
   const round = req.params.round;
-  console.log('GRABBING round ${round}');
+  console.log(`GRABBING round ${round}'`;
   res.set('Content-Type', 'application/json');
   topcoder.getRound(round)
     .then(coders => {
