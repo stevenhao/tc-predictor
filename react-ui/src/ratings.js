@@ -14,14 +14,14 @@ export default (roundData, userData) => {
     }
   };
 
-  const users = roundData.map(row => ({
+  let users = roundData.map(row => ({
     points: row.totalPoints,
     username: row.userName,
     ...getUserData(row.userName),
   }));
   // user should be keyed by username
 
-   _.sortBy(users, user => user.totalPoints);
+  users = _.sortBy(users, user => -user.points);
 
   const ranks = _.map(users, ({ points }) => _.filter(users, user => user.points > points).length);
   const predictions = _.map(users, (({ rating }, i) => {

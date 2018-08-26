@@ -35,6 +35,7 @@ class App extends Component {
     return fetch(`http://localhost:5000/api/round/${round}`)
       .then(r => r.json())
       .then(roundData => {
+        console.log('got roundData', roundData);
         const users = roundData.map(({userName}) => userName);
         Promise.map(users, user => (
           fetch(`http://localhost:5000/api/user/${user}`)
