@@ -4,6 +4,7 @@ Setup:
 - get yarn (`brew install yarn`)
 - install dependencies (`yarn`)
 - install nodemon (`yarn global add nodemon`)
+- install create react app (`yarn global add create-react-app`)
 - build the frontend (`cd react-ui && yarn build`)
 - run the server (`yarn start`)
 - go to http://localhost:5000
