@@ -11,14 +11,15 @@ class Topcoder {
   initializeSocket() {
     console.log('connecting');
     this.socket = socketio.connect('https://arenaws.topcoder.com');
+
     this.socket.on('connect', () => {
-      console.log('connected!');
+      console.log('connected!', this.sso);
       this.socket.emit('SSOLoginRequest', {
         sso: this.sso,
       });
     });
-    this.socket.on('event', () => {
-      console.log('event!');
+    this.socket.on('LoginResponse', (...args) => {
+      console.log('LoginResponse', ...args);
     });
     this.socket.on('disconnect', () => {
       console.log('disconnected!');
