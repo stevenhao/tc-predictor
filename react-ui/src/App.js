@@ -7,9 +7,9 @@ import './App.css';
 import ratingPredictor from './ratings';
 
 const makeDefaultData = () => (
-  _.range(10).map(i => ({
-    name: 'Scott Wu',
-    oldRating: 1100 + i * 100,
+  _.range(50).map(i => ({
+    name: 'scott_wu',
+    oldRating: -1 + i * 100,
     newRating: 2000 + i * 50,
     deltaRating: 200,
   }))

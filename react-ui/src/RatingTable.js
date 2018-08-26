@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
+import RatingIcon from './RatingIcon';
 import 'react-table/react-table.css';
 import './RatingTable.css';
 
 export default class RatingTable extends Component {
   render() {
     const { data } = this.props;
+
+    let getProfileLink = name => `https://www.topcoder.com/members/${encodeURIComponent(name)}/details/?track=DATA_SCIENCE&subTrack=SRM`
+
     const columns = [{
+      id: 'name',
       Header: 'Name',
-      accessor: 'name',
+      accessor: d => d,
+      Cell: props => (
+        <span className="username">
+          <RatingIcon rating={props.value.oldRating} />
+          <a href={getProfileLink(props.value.name)}>{props.value.name}</a>
+        </span>
+      ),
     }, {
       Header: 'Old Rating',
       accessor: 'oldRating',
