@@ -12,6 +12,7 @@ class Topcoder {
     console.log('connecting');
     this.socket = socketio.connect('https://arenaws.topcoder.com');
 
+    console.log('SOCKETIOVERSION=', socketio.version);
     this.socket.on('connect', () => {
       console.log('connected!', this.sso);
       this.socket.emit('SSOLoginRequest', {
