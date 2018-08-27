@@ -35,7 +35,10 @@ export default (roundData, userData) => {
     }
   };
 
-  let users = roundData.map(row => ({
+  const participantRoundData = _.filter(roundData,
+    ({ components, totalPoints }) => _.some(components, ({ status }) => status !== 110) || totalPoints !== 0
+  );
+  let users = participantRoundData.map(row => ({
     points: row.totalPoints,
     username: row.userName,
     ...getUserData(row.userName),
@@ -44,11 +47,18 @@ export default (roundData, userData) => {
 
   users = _.sortBy(users, user => -user.points);
 
+  console.log("Registered users:", roundData.length)
+  console.log("Participating users:", users.length)
+
   const ratedUsers = users.filter(({ matchCount }) => matchCount > 0);
+
+  console.log("Previously rated users:", ratedUsers.length)
 
   const CF = getCompetitionFactor(
     _.map(ratedUsers, ({ volatility }) => volatility),
     _.map(ratedUsers, ({ rating }) => rating));
+
+  console.log("Competition Factor:", CF)
 
   const toPerf = rank => getPerfFromRank(rank, ratedUsers.length);
   _.forEach(users, ((user) => {
