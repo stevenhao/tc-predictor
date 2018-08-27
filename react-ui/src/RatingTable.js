@@ -77,6 +77,7 @@ export default class RatingTable extends Component {
 
     return (
       <ReactTable
+        className="RatingTable"
         key={`${data.length}`}
         data={data}
         columns={columns}

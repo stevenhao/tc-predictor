@@ -19,8 +19,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      data: makeDefaultData(),
-      loading: false,
+      //data: makeDefaultData(),
+      loading: true,
       round: '17247',
     };
   }
@@ -48,6 +48,7 @@ class App extends Component {
           const data = ratingPredictor(roundData, userData);
           this.setState({
             data,
+            loading: false,
           })
         });
       });
@@ -59,7 +60,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">2018 TCO Algorithm Wilcard Fun Round</h1>
         </header>
-        <RatingTable data={this.state.data} />
+        {this.state.loading ? "Loading data..." : <RatingTable data={this.state.data} />}
       </div>
     );
   }

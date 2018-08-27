@@ -2,11 +2,14 @@ a {
   text-decoration: none;
 }
 
-.App {
-  text-align: center;
+body {
   background-color: #181a1b;
   /* color: #636d70; */
   color: white;
+}
+
+.App {
+  text-align: center;
 }
 
 .App-logo {
