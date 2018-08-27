@@ -14,6 +14,9 @@ export default class RatingTable extends Component {
     const deltaDisplay = delta => delta > 0 ? "+" + delta : delta
 
     const columns = [{
+      Header: 'Rank',
+      accessor: 'rank',
+    }, {
       id: 'name',
       Header: 'Name',
       accessor: d => ({name: d.name, rating: d.oldRating}),
@@ -35,7 +38,7 @@ export default class RatingTable extends Component {
       accessor: d => (d.oldRating < 0 || d.newRating < 0 ? null : d.newRating - d.oldRating),
       Cell: props => (
         <span className="delta">
-          {props.value ? deltaDisplay(props.value) : "-"}
+          {props.value !== null ? deltaDisplay(props.value) : "-"}
         </span>
       ),
       sortMethod: (a, b, desc) => {
@@ -64,6 +67,12 @@ export default class RatingTable extends Component {
           <RatingIcon rating={props.value} value={ratingDisplay(props.value)} showBubble={true}/>
         </span>
       )
+    }, {
+      Header: 'Old Volatility',
+      accessor: 'oldVolatility',
+    }, {
+      Header: 'New Volatility',
+      accessor: 'newVolatility',
     }]
 
     return (

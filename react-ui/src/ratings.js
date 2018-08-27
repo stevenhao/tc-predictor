@@ -46,22 +46,26 @@ export default (roundData, userData) => {
 
   const ratedUsers = users.filter(({ matchCount }) => matchCount > 0);
 
-  const winProbabilities = _.map(users, ({ rating, volatility }) => (
-    _.map(ratedUsers, ({ rating: oRating, volatility: oVolatility }) => (
-      getWinProbability(rating, oRating, volatility, oVolatility)
-    ))
-  ));
-
   const CF = getCompetitionFactor(
     _.map(ratedUsers, ({ volatility }) => volatility),
     _.map(ratedUsers, ({ rating }) => rating));
 
-
   const toPerf = rank => getPerfFromRank(rank, ratedUsers.length);
-  const predictions = _.map(users, (({ rating, matchCount, points }, i) => {
-    // if (matchCount === 0) return 0; // no prediction for unrated users
-    const expectedRank = 0.5 + _.sum(winProbabilities[i]);
-    const actualRank = 1 + _.filter(ratedUsers, user => user.points > points).length;
+  _.forEach(users, ((user) => {
+    const { rating, volatility, matchCount, points } = user;
+    // if (matchCount === 0) return; // no prediction for unrated users
+    const expectedRank = 0.5 + _.sum(_.map(ratedUsers, ({ rating: oRating, volatility: oVolatility }) => (
+      getWinProbability(rating, oRating, volatility, oVolatility)
+    )));
+
+    const numLoss = _.filter(ratedUsers, user => user.points > points).length;
+    const numTies = _.filter(ratedUsers, user => user.points === points).length;
+    const displayRank = 1 + numLoss;
+    const actualRank = 0.5 + numLoss + 0.5 * numTies;
+
+    user.expectedRank = expectedRank;
+    user.displayRank = displayRank;
+    user.actualRank = actualRank;
 
     const perfAs = rating + CF * (toPerf(actualRank) - toPerf(expectedRank));
     let weight = 1 / (1 - (0.42 / (matchCount + 1) + 0.18)) - 1;
@@ -73,15 +77,22 @@ export default (roundData, userData) => {
     const cap = Math.round(150 + 1500 / (matchCount + 2));
     const newRating = (rating + weight * perfAs) / (1 + weight);
     const prediction = _.clamp(Math.round(newRating - rating), -cap, cap);
-    return prediction;
+
+    user.deltaRating = prediction;
+    user.newRating = rating + prediction;
+
+    user.newVolatility = Math.round(Math.sqrt(square(prediction) / weight + square(user.volatility) / (weight + 1)));
   }));
 
-  return users.map((user, i) => ({
+  return users.map((user) => ({
     name: user.username,
-    deltaRating: predictions[i],
     oldRating: user.rating,
-    newRating: user.rating + predictions[i],
+    newRating: user.newRating,
+    deltaRating: user.deltaRating,
     oldVolatility: user.volatility,
-    newVolatility: user.volatility,
+    newVolatility: user.newVolatility,
+    rank: user.displayRank,
+    trueRank: user.actualRank,
+    seed: user.expectedRank,
   }));
 };
