@@ -39,7 +39,18 @@ export default (roundData, userData) => {
     ({ components, totalPoints }) => _.some(components, ({ status }) => status !== 110) || totalPoints !== 0
   );
   let users = participantRoundData.map(row => ({
-    points: row.totalPoints,
+    points: (() => {
+      const problems = _.sum(row.components.map(({points}) => points)) / 100;
+      const totalPoints = row.totalPoints / 100;
+      const hacks = totalPoints - problems;
+      console.log(hacks);
+      if (Math.abs(hacks % 25) > 1) {
+        console.log('fucked');
+        return problems; //unlikely for this to happen, i think
+      }
+      return totalPoints;
+    })(),
+    // points: row.totalPoints,
     username: row.userName,
     ...getUserData(row.userName),
   }));
@@ -96,6 +107,7 @@ export default (roundData, userData) => {
 
   return users.map((user) => ({
     name: user.username,
+    points: user.points,
     oldRating: user.rating,
     newRating: user.newRating,
     deltaRating: user.deltaRating,
