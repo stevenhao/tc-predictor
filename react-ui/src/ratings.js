@@ -44,9 +44,8 @@ export default (roundData, userData) => {
       const totalPoints = row.totalPoints / 100;
       const hacks = totalPoints - problems;
       console.log(hacks);
-      if (Math.abs(hacks % 25) > 1) {
-        console.log('fucked');
-        return problems; //unlikely for this to happen, i think
+      if (Math.min(Math.abs(hacks % 25), 25 - Math.abs(hacks % 25)) > 0.1) {
+        return problems; // unlikely for this to happen, i think
       }
       return totalPoints;
     })(),
