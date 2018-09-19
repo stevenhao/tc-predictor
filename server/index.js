@@ -4,6 +4,9 @@ const Topcoder = require('./topcoder');
 const redis = require("redis");
 const expressRedisCache = require('express-redis-cache');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const Promise = require('bluebird');
+
 require('dotenv').config()
 
 
@@ -13,9 +16,11 @@ if (!process.env.TCSSO) {
 }
 
 const server = express();
+server.use(bodyParser.json());
 
 // CORS allow localhost:3000, for dev purposes
-server.use(cors({ origin: 'http://localhost:3000' }))
+// server.use(cors({ origin: 'http://localhost:3000' }))
+server.use(cors({ origin: 'http://localhost:3001' }))
 
 // Priority serve any static files.
 server.use(express.static(path.resolve(__dirname, '../react-ui/build')));
@@ -32,6 +37,18 @@ if (process.env.ENABLE_CACHE) {
 
 const topcoder = new Topcoder(process.env.TCSSO);
 topcoder.initializeSocket();
+
+server.post('/api/users', function (req, res) {
+  const users = req.body.users;
+  Promise.map(users, user => (
+    topcoder.getUser(user)
+  ), {
+    concurrency: 5,
+  }).then(users => {
+    console.log('returning', users)
+    res.json(users);
+  });
+});
 
 // Answer API requests.
 server.get('/api/user/:user', function (req, res) {

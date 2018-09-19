@@ -45,7 +45,7 @@ class Topcoder {
       }));
   }
 
-  getRound(roundID=17247, divisionID=1) {
+  getRound(roundID=17265, divisionID=1) {
     console.log('emitting');
     this.socket.emit('DivSummaryRequest', {
       roundID,
