@@ -21,7 +21,7 @@ class App extends Component {
     this.state = {
       //data: makeDefaultData(),
       loading: true,
-      round: '17247',
+      round: '17265',
     };
   }
 
@@ -37,14 +37,18 @@ class App extends Component {
     return fetch(`${apiServer}/api/round/${round}`)
       .then(r => r.json())
       .then(roundData => {
-        console.log('got roundData', roundData);
         const users = roundData.map(({userName}) => userName);
-        Promise.map(users, user => (
-          fetch(`${apiServer}/api/user/${user}`)
-          .then(r => r.json())
-        ))
+        fetch(`${apiServer}/api/users`, {
+          method: 'POST',
+          body: JSON.stringify({
+            users,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(response => response.json())
         .then(userData => {
-          console.log('got userData', userData);
           const data = ratingPredictor(roundData, userData);
           this.setState({
             data,
@@ -58,9 +62,14 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">2018 TCO Algorithm Wilcard Fun Round</h1>
+          <h1 className="App-title">TCO19 Single Round Match 737</h1>
         </header>
         {this.state.loading ? "Loading data..." : <RatingTable data={this.state.data} />}
+        <footer className="App-footer">
+          <a href="https://github.com/stevenhao/tc-predictor">
+            <div style={{height: 30, width: 30, display: 'inline-block', backgroundImage: "url(https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png)", backgroundSize: 'contain' }}/>
+          </a>
+        </footer>
       </div>
     );
   }

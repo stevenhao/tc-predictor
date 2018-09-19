@@ -33,6 +33,23 @@ export default class RatingTable extends Component {
         else return 0;
       },
     }, {
+      id: 'points',
+      Header: 'Points',
+      accessor: 'points',
+      Cell: props => (
+        <span className="points">
+          {props.value}
+        </span>
+      ),
+      sortMethod: (a, b, desc) => {
+        if (a === null && b === null) return 0;
+        else if (a === null) return desc ? -1 : 1;
+        else if (b === null) return desc ? 1 : -1;
+        else if (a < b) return -1;
+        else if (a > b) return 1;
+        else return 0;
+      },
+    }, {
       id: 'delta',
       Header: 'Delta',
       accessor: d => (d.oldRating < 0 || d.newRating < 0 ? null : d.newRating - d.oldRating),
